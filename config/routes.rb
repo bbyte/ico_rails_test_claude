@@ -8,8 +8,8 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :feeds, only: [:create]
-      resources :feed_items, only: [:index]
+      resources :feeds, only: [ :create ]
+      resources :feed_items, only: [ :index ]
       get "health", to: "health#show"
     end
   end

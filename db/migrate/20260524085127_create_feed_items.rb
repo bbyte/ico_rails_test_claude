@@ -12,7 +12,7 @@ class CreateFeedItems < ActiveRecord::Migration[8.1]
     end
 
     add_index :feed_items, :feed_request_id
-    add_index :feed_items, [:feed_request_id, :link], unique: true
+    add_index :feed_items, [ :feed_request_id, :link ], unique: true
     add_foreign_key :feed_items, :feed_requests
   end
 end
