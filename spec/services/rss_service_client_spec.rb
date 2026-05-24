@@ -7,7 +7,7 @@ RSpec.describe RssServiceClient do
   let(:client)   { described_class.new(jwt: jwt) }
 
   describe "#parse" do
-    let(:urls)   { ["https://feeds.bbci.co.uk/news/rss.xml"] }
+    let(:urls)   { [ "https://feeds.bbci.co.uk/news/rss.xml" ] }
     let(:job_id) { "job-abc-123" }
 
     context "when done on first poll" do
@@ -18,7 +18,7 @@ RSpec.describe RssServiceClient do
         stub_request(:get, "#{base_url}/jobs/#{job_id}")
           .to_return(
             status: 200,
-            body: { status: "done", items: [{ title: "Test", link: "https://bbc.co.uk/1" }] }.to_json,
+            body: { status: "done", items: [ { title: "Test", link: "https://bbc.co.uk/1" } ] }.to_json,
             headers: { "Content-Type" => "application/json" }
           )
       end

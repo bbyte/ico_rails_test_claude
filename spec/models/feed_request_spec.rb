@@ -8,7 +8,7 @@ RSpec.describe FeedRequest, type: :model do
 
   describe "status transitions" do
     let(:user) { FactoryBot.create(:user) }
-    let(:req)  { FactoryBot.create(:feed_request, user: user, status: "pending", urls: ["https://example.com/rss"]) }
+    let(:req)  { FactoryBot.create(:feed_request, user: user, status: "pending", urls: [ "https://example.com/rss" ]) }
 
     it "can transition to done" do
       req.update!(status: "done")

@@ -7,7 +7,7 @@ RSpec.describe RedisStreamProducer do
   describe "#publish" do
     it "calls XADD with job_id and urls" do
       allow(redis).to receive(:xadd).and_return("1-0")
-      producer.publish("job-123", ["https://example.com/rss"])
+      producer.publish("job-123", [ "https://example.com/rss" ])
       expect(redis).to have_received(:xadd).with(
         "rss:commands",
         { job_id: "job-123", urls: '["https://example.com/rss"]' }

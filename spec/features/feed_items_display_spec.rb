@@ -37,6 +37,6 @@ RSpec.describe "Feed items display", type: :feature, js: true do
     visit "/"
     expect(page).to have_css(".feed-item", count: 2)
     titles = all(".feed-item .card-title").map(&:text)
-    expect(titles).to eq(["Breaking News", "Other Story"])
+    expect(titles).to eq([ "Breaking News", "Other Story" ])
   end
 end

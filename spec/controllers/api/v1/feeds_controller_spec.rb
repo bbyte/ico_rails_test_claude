@@ -13,20 +13,20 @@ RSpec.describe Api::V1::FeedsController, type: :controller do
       end
 
       it "returns 202 with pending status" do
-        post :create, params: { urls: ["https://feeds.bbci.co.uk/news/rss.xml"] }
+        post :create, params: { urls: [ "https://feeds.bbci.co.uk/news/rss.xml" ] }
         expect(response).to have_http_status(:accepted)
         expect(JSON.parse(response.body)["status"]).to eq("pending")
       end
 
       it "creates a FeedRequest" do
         expect {
-          post :create, params: { urls: ["https://example.com/rss"] }
+          post :create, params: { urls: [ "https://example.com/rss" ] }
         }.to change(FeedRequest, :count).by(1)
       end
     end
 
     context "fallback mode" do
-      let(:items) { [{ "title" => "Test", "link" => "https://example.com/1", "source" => "Test", "source_url" => "https://example.com", "publish_date" => "2026-05-23", "description" => "desc" }] }
+      let(:items) { [ { "title" => "Test", "link" => "https://example.com/1", "source" => "Test", "source_url" => "https://example.com", "publish_date" => "2026-05-23", "description" => "desc" } ] }
 
       before do
         allow(ModeDetector).to receive(:current).and_return("fallback")
@@ -34,7 +34,7 @@ RSpec.describe Api::V1::FeedsController, type: :controller do
       end
 
       it "returns 201 with items" do
-        post :create, params: { urls: ["https://example.com/rss"] }
+        post :create, params: { urls: [ "https://example.com/rss" ] }
         expect(response).to have_http_status(:created)
         body = JSON.parse(response.body)
         expect(body["status"]).to eq("done")
@@ -57,7 +57,7 @@ RSpec.describe Api::V1::FeedsController, type: :controller do
     before { sign_out user }
 
     it "returns 401" do
-      post :create, params: { urls: ["https://example.com/rss"] }
+      post :create, params: { urls: [ "https://example.com/rss" ] }
       expect(response).to have_http_status(:unauthorized)
     end
   end

@@ -14,7 +14,7 @@ RSpec.describe "POST /api/v1/feeds", type: :request do
       end
 
       it "returns 202 with job_id" do
-        post "/api/v1/feeds", params: { urls: ["https://feeds.bbci.co.uk/news/rss.xml"] }.to_json, headers: headers
+        post "/api/v1/feeds", params: { urls: [ "https://feeds.bbci.co.uk/news/rss.xml" ] }.to_json, headers: headers
         expect(response).to have_http_status(:accepted)
         body = JSON.parse(response.body)
         expect(body["status"]).to eq("pending")
@@ -24,7 +24,7 @@ RSpec.describe "POST /api/v1/feeds", type: :request do
 
       it "creates a FeedRequest record" do
         expect {
-          post "/api/v1/feeds", params: { urls: ["https://example.com/rss"] }.to_json, headers: headers
+          post "/api/v1/feeds", params: { urls: [ "https://example.com/rss" ] }.to_json, headers: headers
         }.to change(FeedRequest, :count).by(1)
         expect(FeedRequest.last.status).to eq("pending")
       end
@@ -32,9 +32,9 @@ RSpec.describe "POST /api/v1/feeds", type: :request do
 
     context "fallback mode (Redis unavailable)" do
       let(:items) do
-        [{ "title" => "Test", "link" => "https://example.com/1",
+        [ { "title" => "Test", "link" => "https://example.com/1",
            "source" => "Test Feed", "source_url" => "https://example.com/rss",
-           "publish_date" => "2026-05-23", "description" => "Test desc" }]
+           "publish_date" => "2026-05-23", "description" => "Test desc" } ]
       end
 
       before do
@@ -43,7 +43,7 @@ RSpec.describe "POST /api/v1/feeds", type: :request do
       end
 
       it "returns 201 with items inline" do
-        post "/api/v1/feeds", params: { urls: ["https://example.com/rss"] }.to_json, headers: headers
+        post "/api/v1/feeds", params: { urls: [ "https://example.com/rss" ] }.to_json, headers: headers
         expect(response).to have_http_status(:created)
         body = JSON.parse(response.body)
         expect(body["status"]).to eq("done")
@@ -52,7 +52,7 @@ RSpec.describe "POST /api/v1/feeds", type: :request do
       end
 
       it "persists items to the database" do
-        post "/api/v1/feeds", params: { urls: ["https://example.com/rss"] }.to_json, headers: headers
+        post "/api/v1/feeds", params: { urls: [ "https://example.com/rss" ] }.to_json, headers: headers
         expect(FeedItem.count).to eq(1)
         expect(FeedItem.last.title).to eq("Test")
       end
@@ -71,7 +71,7 @@ RSpec.describe "POST /api/v1/feeds", type: :request do
 
   context "when unauthenticated" do
     it "returns 401" do
-      post "/api/v1/feeds", params: { urls: ["https://example.com/rss"] }.to_json, headers: headers
+      post "/api/v1/feeds", params: { urls: [ "https://example.com/rss" ] }.to_json, headers: headers
       expect(response).to have_http_status(:unauthorized)
     end
   end

@@ -7,7 +7,7 @@ RSpec.describe "GET /api/v1/feed_items", type: :request do
   context "when authenticated as alice" do
     before do
       sign_in alice
-      req = FactoryBot.create(:feed_request, user: alice, urls: ["https://example.com"])
+      req = FactoryBot.create(:feed_request, user: alice, urls: [ "https://example.com" ])
       FactoryBot.create(:feed_item, feed_request: req, link: "https://a.com/1", publish_date: "2026-05-23", title: "Newer")
       FactoryBot.create(:feed_item, feed_request: req, link: "https://a.com/2", publish_date: "2026-05-22", title: "Older")
     end
