@@ -1,0 +1,57 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_PASSWORD: password
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  rss_service:
+    build:
+      context: ../rssservice
+      dockerfile: Dockerfile
+    environment:
+      REDIS_DSN: redis://redis:6379/0
+      JWT_PUBLIC_KEY_PATH: /keys/ec_public.pem
+    ports:
+      - "8080:8080"
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  rails:
+    build: .
+    command: bundle exec rails server -b 0.0.0.0
+    environment:
+      DATABASE_URL: postgres://postgres:password@db/rss_frontend_production
+      REDIS_URL: redis://redis:6379/1
+      RSS_SERVICE_URL: http://rss_service:8080
+      RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
+      ENABLE_STREAM_CONSUMER: "1"
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rss_service:
+        condition: service_started
+
+volumes:
+  pg_data:

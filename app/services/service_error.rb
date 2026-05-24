@@ -1,0 +1,1 @@
+ServiceError = Class.new(StandardError)

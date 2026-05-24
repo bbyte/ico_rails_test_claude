@@ -1,0 +1,9 @@
+h2 Sign in
+= form_for resource, as: resource_name, url: session_path(resource_name) do |f|
+  .mb-3
+    = f.label :email, class: "form-label"
+    = f.email_field :email, class: "form-control", autofocus: true
+  .mb-3
+    = f.label :password, class: "form-label"
+    = f.password_field :password, class: "form-control"
+  = f.submit "Sign in", class: "btn btn-primary"
